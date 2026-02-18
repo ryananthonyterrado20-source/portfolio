@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan Anthony Terrado</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- CoreUI Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" href="WEBSITE LOGO.png" type="image/png">
+    <!-- Supabase/Firebase is handled in script.js (module) -->
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">&lt;C/&gt; <span id="nav-name">DevPortfolio</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+        </ul>
+        <div class="social-links">
+            <a href="#contact"><i class="cil-envelope-closed"></i></a>
+        </div>
+    </nav>
+
+    <header id="home" class="hero-section">
+        <div class="hero-content">
+            <h1></h1>
+            <div class="hero-grid">
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img src="" alt="Profile" class="profile-pic" id="profile-img">
+                    </div>
+                    <h2 id="card-name">Loading...</h2>
+                    <p class="sub-role" id="card-role">...</p>
+                    <div class="contact-info">
+                        <small id="card-email">...</small>
+                        <small id="card-location">...</small>
+                        <small id="card-website">...</small>
+                    </div>
+                    <div class="social-icons-card">
+                        <i class="cil-code"></i>
+                        <i class="cil-terminal"></i>
+                        <i class="cil-laptop"></i>
+                    </div>
+                    <a href="#contact" class="btn-download" style="text-decoration:none; display:inline-block; margin-top:10px;">
+                        Contact Me <i class="cil-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="intro-text">
+                    <h1 id="bio-heading">Loading...</h1>
+                    <p class="intro-desc" id="bio-desc">Loading...</p>
+                    <a href="#contact" class="btn-talk">Let's Talk <i class="cil-chat-bubble"></i></a>
+                </div>
+
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <h2 id="disp-lang">4+</h2>
+                        <p>Programming<br>Languages</p>
+                    </div>
+                    <div class="stat-item">
+                        <h2 id="disp-proj">10+</h2>
+                        <p>Projects<br>Completed</p>
+                    </div>
+                    <div class="stat-item">
+                        <h2 id="disp-exp">3+</h2>
+                        <p>Year<br>College Student</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="about-section hidden">
+        <div class="section-header">
+            <h2 class="outlined-text">About Me</h2>
+        </div>
+        <div class="about-grid">
+            
+            <!-- LEFT COLUMN: AI CHAT TERMINAL -->
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span style="margin-left: 10px; font-size: 0.8rem; color: #666;">AI Terminal</span>
+                </div>
+                <!-- Chat Area -->
+                <div class="code-content" id="chat-box">
+                    <div class="message bot">
+                        <span class="prompt">RyanAI:~$</span> 
+                        Hello! I am Ryan's AI Assistant. Ask me anything about his skills, projects, or experience!
+                    </div>
+                </div>
+                <!-- Input Area -->
+                <div class="input-area">
+                    <span class="prompt">></span>
+                    <input type="text" id="user-input" placeholder="Type a command or question..." autocomplete="off">
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: IMAGE -->
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80" alt="Workspace">
+            </div>
+
+        </div>
+    </section>
+
+    <section id="skills" class="skills-section hidden">
+        <div class="center-icon">
+            <i class="cil-settings"></i>
+        </div>
+        <h2>Skills</h2>
+        <p class="subtitle">My technical stack and tools</p>
+        <div class="tech-stack" id="skills-container"></div>
+    </section>
+
+    <section id="projects" class="projects-section hidden">
+        <h2>My Projects</h2>
+        <div class="projects-grid" id="projects-container"></div>
+    </section>
+
+    <section id="contact" class="contact-section hidden">
+        <h2>Let's Connect</h2>
+        <p class="subtitle">Feel free to reach out for collaborations</p>
+        
+        <div class="contact-container">
+            <div class="contact-card">
+                <i class="cil-envelope-closed"></i>
+                <h3 id="contact-email">...</h3>
+                <p>Email Me</p>
+            </div>
+            <div class="contact-card">
+                <i class="cil-location-pin"></i>
+                <h3 id="contact-loc">...</h3>
+                <p>Location</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-socials">
+                <a href="#" id="footer-fb" target="_blank"><i class="cib-facebook"></i></a>
+                <a href="#" id="footer-tg" target="_blank"><i class="cib-telegram"></i></a>
+                <a href="#" id="footer-mail"><i class="cib-gmail"></i></a>
+                <a href="#" id="footer-gh" target="_blank"><i class="cib-github"></i></a>
+            </div>
+            <p>&copy; 2024 <span id="footer-name">...</span>. All rights reserved.</p>
+        </footer>
+    </section>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
