@@ -79,9 +79,10 @@
         <div class="section-header">
             <h2 class="outlined-text">About Me</h2>
         </div>
+        
         <div class="about-grid">
             
-            <!-- LEFT COLUMN: AI CHAT TERMINAL -->
+            <!-- COLUMN 1: AI CHAT TERMINAL -->
             <div class="code-block">
                 <div class="code-header">
                     <span class="dot red"></span>
@@ -89,6 +90,7 @@
                     <span class="dot green"></span>
                     <span style="margin-left: 10px; font-size: 0.8rem; color: #666;">AI Terminal</span>
                 </div>
+                
                 <!-- Chat Area -->
                 <div class="code-content" id="chat-box">
                     <div class="message bot">
@@ -96,14 +98,16 @@
                         Hello! I am Ryan's AI Assistant. Ask me anything about his skills, projects, or experience!
                     </div>
                 </div>
-                <!-- Input Area -->
+                
+                <!-- Input Area (May Send Button na) -->
                 <div class="input-area">
                     <span class="prompt">></span>
                     <input type="text" id="user-input" placeholder="Type a command or question..." autocomplete="off">
+                    <button id="send-btn" title="Send"><i class="cil-send"></i></button>
                 </div>
-            </div>
+            </div> <!-- DITO ANG TAMANG CLOSING NG CHATBOX -->
 
-            <!-- RIGHT COLUMN: IMAGE -->
+            <!-- COLUMN 2: IMAGE (Dapat nasa labas ng code-block) -->
             <div class="about-image">
                 <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80" alt="Workspace">
             </div>

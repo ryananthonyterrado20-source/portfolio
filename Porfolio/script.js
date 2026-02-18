@@ -1,4 +1,4 @@
-// --- IMPORTS (Firebase lang ang i-import natin) ---
+// --- IMPORTS ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -14,7 +14,6 @@ const firebaseConfig = {
 };
 
 // --- GEMINI API KEY ---
-// Siguraduhing tama ang copy-paste mo dito
 const GEMINI_API_KEY = "AIzaSyAaMuMWT2k3zXBVUdTxZgAmcywCQeifkho";
 
 // Initialize Firebase
@@ -34,7 +33,6 @@ const setSrc = (id, src) => { if(document.getElementById(id) && src) document.ge
 const setHref = (id, url) => { const el = document.getElementById(id); if(el) { if(url) { el.href = url; el.style.display = 'flex'; } else { el.style.display = 'none'; } } };
 
 // --- 1. FIREBASE LISTENERS ---
-
 function listenToProfile() {
     onSnapshot(doc(db, "profile", "main"), (docSnap) => {
         if (docSnap.exists()) {
@@ -77,7 +75,6 @@ function listenToSkills() {
             snapshot.forEach((doc) => {
                 const skill = doc.data();
                 portfolioData.skills.push(skill.tech_name);
-                
                 const div = document.createElement('div');
                 div.className = 'tech-item';
                 div.style.background = skill.color;
@@ -98,7 +95,6 @@ function listenToProjects() {
             snapshot.forEach((doc) => {
                 const project = doc.data();
                 portfolioData.projects.push(`${project.title} (${project.category})`);
-
                 const div = document.createElement('div');
                 div.className = 'project-card';
                 div.innerHTML = `
@@ -116,87 +112,71 @@ function listenToProjects() {
     });
 }
 
-// --- 2. AI CHATBOT LOGIC (DIRECT FETCH VERSION) ---
-
+// --- 2. AI CHATBOT LOGIC ---
 async function askGemini(userMessage) {
-    // SYSTEM PROMPT: Dito natin tinuturuan ang AI kung sino siya
     const systemPrompt = `
         Role: You are an AI assistant for the portfolio of ${portfolioData.profile.name}.
         Tone: Professional, concise, tech-savvy (like a terminal output).
-        
-        CONTEXT DATA:
-        - Name: ${portfolioData.profile.name}
-        - Role: ${portfolioData.profile.role}
-        - Bio: ${portfolioData.profile.bio_description}
-        - Email: ${portfolioData.profile.email}
-        - Skills: ${portfolioData.skills.join(', ')}
-        - Projects: ${portfolioData.projects.join(', ')}
-        
-        RULES:
-        1. Only answer questions related to ${portfolioData.profile.name}.
-        2. If asked about general topics (math, history, etc.), say: "ACCESS DENIED: I can only process queries about the developer."
-        3. Keep answers short (max 2-3 sentences).
-        4. Do NOT use Markdown formatting (no bold/italic).
+        CONTEXT: Name: ${portfolioData.profile.name}, Role: ${portfolioData.profile.role}, Bio: ${portfolioData.profile.bio_description}, Email: ${portfolioData.profile.email}, Skills: ${portfolioData.skills.join(', ')}, Projects: ${portfolioData.projects.join(', ')}.
+        RULES: Only answer questions about the developer. Keep it short. No Markdown.
     `;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const payload = {
-        contents: [
-            {
-                role: "user",
-                parts: [{ text: systemPrompt + "\n\nUser Question: " + userMessage }]
-            }
-        ]
-    };
-
+    
     try {
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                contents: [{ role: "user", parts: [{ text: systemPrompt + "\nUser: " + userMessage }] }]
+            })
         });
 
         const data = await response.json();
-
+        
         if (data.error) {
-            console.error("AI Error:", data.error);
-            return "Error: " + data.error.message;
+            console.error("AI API Error:", data.error);
+            return "Error: " + (data.error.message || "Invalid API Key or Service not enabled.");
         }
-
-        return data.candidates[0].content.parts[0].text;
+        
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from AI.";
 
     } catch (error) {
-        console.error("Network Error:", error);
-        return "Error: Connection failed.";
+        return "Error: Network connection failed.";
     }
 }
 
-// --- 3. CHAT UI HANDLER ---
+// --- 3. CHAT UI HANDLER (Button + Enter) ---
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
 
+async function handleChat() {
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    // 1. Add User Message
+    addMessage(message, 'user');
+    userInput.value = '';
+
+    // 2. Show Loading
+    const loadingId = addMessage("Analyzing...", 'bot');
+
+    // 3. Get Response
+    const reply = await askGemini(message);
+
+    // 4. Remove Loading & Show Reply
+    const loadingMsg = document.getElementById(loadingId);
+    if (loadingMsg) loadingMsg.remove();
+    
+    addMessage(reply, 'bot');
+}
+
+// Event Listeners
+if (sendBtn) sendBtn.addEventListener('click', handleChat);
 if (userInput) {
-    userInput.addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            // Add User Message
-            addMessage(message, 'user');
-            userInput.value = '';
-            
-            // Show Loading
-            const loadingId = addMessage("Analyzing...", 'bot');
-
-            // Get AI Response
-            const reply = await askGemini(message);
-            
-            // Remove Loading & Show Reply
-            const loadingMsg = document.getElementById(loadingId);
-            if(loadingMsg) loadingMsg.remove();
-            
-            addMessage(reply, 'bot');
-        }
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleChat();
     });
 }
 
@@ -205,22 +185,18 @@ function addMessage(text, sender) {
     div.className = `message ${sender}`;
     const id = `msg-${Date.now()}`;
     div.id = id;
-    
     const prefix = sender === 'bot' ? '<span class="prompt">RyanAI:~$</span>' : '<span class="prompt">></span>';
     div.innerHTML = `${prefix} ${text}`;
-    
-    if(chatBox) {
+    if (chatBox) {
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
     return id;
 }
 
-// --- INITIALIZATION ---
+// Initialize
 const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add('show');
-    });
+    entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('show'); });
 });
 document.querySelectorAll('.hidden').forEach((el) => observer.observe(el));
 

@@ -842,3 +842,41 @@ input:focus, textarea:focus { border-color: var(--accent); }
         grid-template-columns: 1fr; /* Pag mobile, isa-isa na lang sila */
     }
 }
+
+/* --- Send Button Styling --- */
+.input-area {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #111;
+    border-top: 1px solid #333;
+    gap: 10px; /* Space between elements */
+}
+
+.input-area input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    flex-grow: 1; /* Sakupin ang natitirang space */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+#send-btn {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-btn:hover {
+    color: #fff;
+    transform: translateX(3px); /* Animation pag hover */
+}
